@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A Little Sorry 🌹</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Georgia,serif}
+body{background:linear-gradient(145deg,#fff7f8,#f8e9ed);display:flex;justify-content:center;align-items:center;padding:16px}
+.wrap{width:min(720px,100%);text-align:center}
+h1{color:#843d50;font-size:26px;margin:4px 0 6px}
+p{color:#765d65;margin:0 0 14px;font-family:system-ui,sans-serif}
+.garden{position:relative;width:100%;height:min(76vh,620px);min-height:420px;border:1px solid #e7cfd6;border-radius:28px;background:radial-gradient(circle at 50% 15%,#fff,#fbeef1 58%,#f5e1e7);overflow:hidden;touch-action:manipulation;box-shadow:0 10px 35px rgba(100,45,60,.10)}
+.flower{position:absolute;transform:translate(-50%,-50%) scale(.1);opacity:0;pointer-events:none;animation:bloom .75s cubic-bezier(.2,.85,.2,1) forwards}
+.rose{font-size:clamp(38px,9vw,62px);line-height:1}
+.sorry{margin-top:2px;font-size:clamp(15px,3.5vw,21px);font-weight:bold;letter-spacing:3px;color:#963e56;text-shadow:0 1px 2px white}
+.spark{position:absolute;pointer-events:none;color:#b86a7e;font-size:18px;animation:spark 900ms ease-out forwards}
+button{margin-top:14px;border:1px solid #d9b8c2;border-radius:999px;background:white;color:#843d50;padding:11px 20px;font-size:15px}
+@keyframes bloom{0%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(-15deg)}55%{opacity:1;transform:translate(-50%,-50%) scale(1.13) rotate(5deg)}100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}}
+@keyframes spark{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-85px) scale(1.2)}}
+@media(prefers-reduced-motion:reduce){.flower{animation:none;opacity:1;transform:translate(-50%,-50%) scale(1)}.spark{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Tap anywhere 🌹</h1>
+<p>Every tap is a little “SORRY” from me.</p>
+<div class="garden" id="garden" aria-label="Interactive sorry garden"></div>
+<button id="clear" type="button">Start again</button>
+</div>
+<script>
+const garden=document.getElementById('garden');
+const flowers=['🌹','🌷','🌸','🌺','🌻'];
+garden.addEventListener('pointerdown',e=>{
+  const r=garden.getBoundingClientRect();
+  const x=e.clientX-r.left,y=e.clientY-r.top;
+  const f=document.createElement('div');
+  f.className='flower';
+  f.style.left=x+'px'; f.style.top=y+'px';
+  f.innerHTML='<div class="rose">'+flowers[Math.floor(Math.random()*flowers.length)]+'</div><div class="sorry">SORRY</div>';
+  garden.appendChild(f);
+  for(let i=0;i<3;i++){
+    const s=document.createElement('span');
+    s.className='spark'; s.textContent='✦';
+    s.style.left=(x+(Math.random()-.5)*50)+'px';
+    s.style.top=(y+(Math.random()-.5)*35)+'px';
+    s.style.animationDelay=(i*50)+'ms';
+    garden.appendChild(s);
+    setTimeout(()=>s.remove(),1000);
+  }
+});
+document.getElementById('clear').addEventListener('click',()=>{
+  garden.querySelectorAll('.flower,.spark').forEach(x=>x.remove());
+});
+</script>
+</body>
+</html>
